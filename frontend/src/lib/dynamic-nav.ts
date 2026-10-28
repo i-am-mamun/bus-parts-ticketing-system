@@ -128,14 +128,14 @@ export function useDynamicNav() {
         ],
       },
 
-      // 3. Fleet & Parts Log
+      // 3. Fleet & Coaches
       {
-        title: "Fleet & Depots",
-        titleBn: "বাস বহর ও ডিপো",
+        title: "Fleet",
+        titleBn: "বাস বহর",
         items: [
           {
-            label: "Bus Fleet Registry",
-            labelBn: "বাস বহর তালিকা",
+            label: "Bus Fleet",
+            labelBn: "বাস বহর",
             href: "/fleet",
             icon: CarFront,
             children: [
@@ -145,6 +145,20 @@ export function useDynamicNav() {
                 href: "/fleet",
                 icon: CarFront,
               },
+              {
+                label: "Parts History & Log Book",
+                labelBn: "পার্টস ব্যবহারের ইতিহাস",
+                href: "/fleet/history",
+                icon: History,
+              },
+            ],
+          },
+          {
+            label: "Depots & Storage",
+            labelBn: "ডিপো ও ওয়্যারহাউজ",
+            href: "/branches",
+            icon: Building2,
+            children: [
               {
                 label: "Depots & Hubs",
                 labelBn: "ডিপো ও টার্মিনাল",
@@ -157,19 +171,13 @@ export function useDynamicNav() {
                 href: "/warehouses",
                 icon: WhIcon,
               },
-              {
-                label: "Parts Suppliers & Vendors",
-                labelBn: "পার্টস সরবরাহকারী ও ভেন্ডর",
-                href: "/suppliers",
-                icon: Truck,
-              },
-              {
-                label: "Parts History & Log Book",
-                labelBn: "পার্টস ব্যবহারের ইতিহাস",
-                href: "/fleet/history",
-                icon: History,
-              },
             ],
+          },
+          {
+            label: "Parts Suppliers & Vendors",
+            labelBn: "পার্টস সরবরাহকারী ও ভেন্ডর",
+            href: "/suppliers",
+            icon: Truck,
           },
         ],
       },

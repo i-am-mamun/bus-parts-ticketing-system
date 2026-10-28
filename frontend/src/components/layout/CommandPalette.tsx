@@ -20,6 +20,8 @@ import {
   Ticket,
   History,
   AlertTriangle,
+  Warehouse as WhIcon,
+  Truck,
 } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { useLanguage } from "@/lib/i18n";
@@ -145,11 +147,35 @@ const COMMANDS: CommandItem[] = [
     titleBn: "ডিপো ও ওয়ার্কশপসমূহ",
     subtitleEn: "Manage operational terminals and workshops",
     subtitleBn: "টার্মিনাল ও কেন্দ্রীয় ওয়ার্কশপ ব্যবস্থাপনা",
-    categoryEn: "Fleet & Parts Log",
-    categoryBn: "বাস বহর ও পার্টস লগ",
+    categoryEn: "Depots & Storage",
+    categoryBn: "ডিপো ও ওয়্যারহাউজ",
     icon: Building2,
     href: "/branches",
     keywords: ["depot", "terminal", "branch", "workshop", "ডিপো"],
+  },
+  {
+    id: "warehouses",
+    titleEn: "Warehouses & Storage Bins",
+    titleBn: "ওয়্যারহাউজ ও স্টোরেজ বিন",
+    subtitleEn: "Manage parts stores, racks, shelves, and bin matrices",
+    subtitleBn: "স্পেয়ার পার্টস ওয়্যারহাউজ, র্যাক ও বিন লোকেশন",
+    categoryEn: "Depots & Storage",
+    categoryBn: "ডিপো ও ওয়্যারহাউজ",
+    icon: WhIcon,
+    href: "/warehouses",
+    keywords: ["warehouse", "store", "bin", "rack", "ওয়্যারহাউজ", "বিন"],
+  },
+  {
+    id: "suppliers",
+    titleEn: "Parts Suppliers & Vendors",
+    titleBn: "পার্টস সরবরাহকারী ও ভেন্ডর",
+    subtitleEn: "Authorized parts vendors, contacts, and warranty providers",
+    subtitleBn: "অনুমোদিত পার্টস ভেন্ডর, যোগাযোগ ও ওয়ারেন্টি পার্টনার",
+    categoryEn: "Vendors & Suppliers",
+    categoryBn: "ভেন্ডর ও সরবরাহকারী",
+    icon: Truck,
+    href: "/suppliers",
+    keywords: ["supplier", "vendor", "parts", "warranty", "সরবরাহকারী", "ভেন্ডর"],
   },
 
   // Reports & Analytics

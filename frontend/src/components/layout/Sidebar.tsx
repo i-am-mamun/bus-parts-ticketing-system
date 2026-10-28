@@ -150,13 +150,30 @@ export function Sidebar() {
         setExpandedModules(new Set(lastMod));
         setExpandedItems(new Set(lastItem));
       } else {
-        setExpandedModules(new Set(["Purchasing & Receiving", "Car Inventory Fleet", "Sales & Invoicing"]));
+        setExpandedModules(new Set(["Tickets Management", "Bus Fleet"]));
       }
     } catch {
-      setExpandedModules(new Set(["Purchasing & Receiving", "Car Inventory Fleet", "Sales & Invoicing"]));
+      setExpandedModules(new Set(["Tickets Management", "Bus Fleet"]));
     }
     setIsReady(true);
   }, []);
+
+  // Automatically expand active module if route changes
+  useEffect(() => {
+    if (!currentFullPath || !navGroups.length) return;
+    for (const group of navGroups) {
+      for (const mod of group.items) {
+        if (isModuleActive(mod, currentFullPath, allHrefs)) {
+          setExpandedModules((prev) => {
+            if (prev.has(mod.label)) return prev;
+            const next = new Set(prev);
+            next.add(mod.label);
+            return next;
+          });
+        }
+      }
+    }
+  }, [currentFullPath, navGroups, allHrefs]);
 
   useEffect(() => {
     if (!isReady) return;
