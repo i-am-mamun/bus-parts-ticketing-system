@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+backend/uploads/
+backend/*.db
+backend/.env
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
+*.log
+*.pid

@@ -1,0 +1,148 @@
+"use client";
+
+import React, { ReactNode } from "react";
+import { cn } from "@/lib/cn";
+
+export interface TabItem {
+  id: string;
+  label: string;
+  icon?: ReactNode;
+  badge?: string | number;
+  badgeClassName?: string;
+}
+
+export interface CustomTabsProps {
+  tabs: TabItem[];
+  activeTab: string;
+  onChange: (tabId: string) => void;
+  className?: string;
+  themeColor?: "primary" | "orange" | "teal" | "emerald" | "indigo" | "amber" | "rose" | "purple" | "blue" | "violet";
+  variant?: "solid" | "pills" | "underline";
+  darkMode?: boolean;
+  inactiveClassName?: string;
+  activeClassName?: string;
+  wrap?: boolean;
+  style?: React.CSSProperties;
+}
+
+const THEME_ACTIVE_STYLES: Record<string, string> = {
+  primary: "bg-brand-gradient text-white font-bold border border-brand-primary shadow-xs outline-none",
+  blue: "bg-blue-600 text-white shadow-2xs border border-blue-600 outline-none",
+  orange: "bg-orange-500 text-white shadow-2xs border border-orange-500 outline-none",
+  teal: "bg-[#00796b] text-white shadow-2xs border border-[#00796b] outline-none",
+  emerald: "bg-emerald-600 text-white shadow-2xs border border-emerald-600 outline-none",
+  indigo: "bg-indigo-600 text-white shadow-2xs border border-indigo-600 outline-none",
+  amber: "bg-amber-500 text-white shadow-2xs border border-amber-500 outline-none",
+  rose: "bg-rose-600 text-white shadow-2xs border border-rose-600 outline-none",
+  purple: "bg-purple-600 text-white shadow-2xs border border-purple-600 outline-none",
+  violet: "bg-gradient-to-r from-violet-500 to-indigo-400 text-white font-bold border border-violet-500 shadow-xs outline-none",
+};
+
+const THEME_HOVER_STYLES = (darkMode: boolean): Record<string, string> => ({
+  primary: darkMode ? "hover:bg-slate-800 hover:text-brand-primary" : "hover:bg-brand-50 hover:text-brand-dark",
+  blue: darkMode ? "hover:bg-blue-500/10 hover:text-blue-400" : "hover:bg-blue-50 hover:text-blue-700",
+  orange: darkMode ? "hover:bg-orange-500/10 hover:text-orange-400" : "hover:bg-orange-50 hover:text-orange-700",
+  teal: darkMode ? "hover:bg-brand-primary/10 hover:text-brand-primary" : "hover:bg-brand-50 hover:text-brand-dark",
+  emerald: darkMode ? "hover:bg-emerald-500/10 hover:text-emerald-400" : "hover:bg-emerald-50 hover:text-emerald-600",
+  indigo: darkMode ? "hover:bg-indigo-500/10 hover:text-indigo-400" : "hover:bg-indigo-50 hover:text-indigo-700",
+  amber: darkMode ? "hover:bg-amber-500/10 hover:text-amber-400" : "hover:bg-amber-50 hover:text-amber-600",
+  rose: darkMode ? "hover:bg-rose-500/10 hover:text-rose-400" : "hover:bg-rose-50 hover:text-rose-600",
+  purple: darkMode ? "hover:bg-purple-500/10 hover:text-purple-400" : "hover:bg-purple-50 hover:text-purple-600",
+  violet: darkMode ? "hover:bg-violet-500/10 hover:text-violet-400" : "hover:bg-violet-50 hover:text-violet-600",
+});
+
+const THEME_ICON_COLORS = (darkMode: boolean): Record<string, string> => ({
+  primary: darkMode ? "text-brand-primary" : "text-brand-primary",
+  blue: darkMode ? "text-blue-400" : "text-blue-600",
+  orange: darkMode ? "text-orange-400" : "text-orange-500",
+  teal: darkMode ? "text-brand-primary" : "text-[#00796b]",
+  emerald: darkMode ? "text-emerald-400" : "text-emerald-600",
+  indigo: darkMode ? "text-indigo-400" : "text-indigo-600",
+  amber: darkMode ? "text-amber-400" : "text-amber-500",
+  rose: darkMode ? "text-rose-400" : "text-rose-600",
+  purple: darkMode ? "text-purple-400" : "text-purple-600",
+  violet: darkMode ? "text-violet-400" : "text-violet-600",
+});
+
+export function CustomTabs({
+  tabs,
+  activeTab,
+  onChange,
+  className,
+  themeColor = "primary",
+  variant = "solid",
+  darkMode = false,
+  inactiveClassName,
+  activeClassName,
+  wrap = false,
+  style,
+}: CustomTabsProps) {
+  const activeStyle = activeClassName || THEME_ACTIVE_STYLES[themeColor] || THEME_ACTIVE_STYLES.primary;
+  const hoverStyle = THEME_HOVER_STYLES(darkMode)[themeColor] || THEME_HOVER_STYLES(darkMode).primary;
+  const iconColor = THEME_ICON_COLORS(darkMode)[themeColor] || THEME_ICON_COLORS(darkMode).primary;
+
+  return (
+    <div
+      style={style}
+      className={cn(
+        "flex items-center gap-1.5 rounded-sm p-1.5 w-full transition-colors",
+        wrap ? "flex-wrap overflow-x-visible" : "overflow-x-auto",
+        darkMode
+          ? "border border-slate-800 bg-slate-900 shadow-none"
+          : "border border-brand-border bg-white shadow-2xs",
+        className
+      )}
+    >
+      {tabs.map((tab) => {
+        const isActive = activeTab === tab.id;
+
+        return (
+          <button
+            key={tab.id}
+            id={`custom-tab-${tab.id}`}
+            type="button"
+            onClick={() => onChange(tab.id)}
+            className={cn(
+              "flex items-center gap-2 px-3.5 py-1.5 text-xs font-bold rounded-sm transition-all duration-200 whitespace-nowrap cursor-pointer select-none outline-none focus:outline-none focus-visible:outline-none focus:ring-0",
+              isActive
+                ? cn(activeStyle, themeColor === "primary" && "border border-brand-primary")
+                : inactiveClassName
+                  ? inactiveClassName
+                  : cn(
+                      "border",
+                      darkMode
+                        ? "text-slate-300 bg-slate-800/80 border-slate-700"
+                        : "text-slate-600 bg-white border-brand-border shadow-2xs hover:bg-brand-50 hover:text-brand-primary hover:border-brand-primary",
+                      hoverStyle
+                    )
+            )}
+          >
+            {tab.icon && (
+              <span
+                className={cn(
+                  "flex items-center justify-center shrink-0 w-4 h-4 transition-colors",
+                  isActive ? "text-white" : iconColor
+                )}
+              >
+                {tab.icon}
+              </span>
+            )}
+            <span className="leading-none">{tab.label}</span>
+            {tab.badge !== undefined && (
+              <span
+                className={cn(
+                  "inline-flex items-center justify-center min-w-[20px] h-[18px] px-1.5 text-[10.5px] font-bold leading-none rounded-sm transition-colors shrink-0",
+                  isActive
+                    ? "bg-white text-brand-dark font-black shadow-2xs"
+                    : tab.badgeClassName || (darkMode ? "bg-slate-700 text-slate-300" : "bg-brand-50 text-brand-primary border border-brand-border")
+                )}
+              >
+                {tab.badge}
+              </span>
+            )}
+          </button>
+        );
+      })}
+    </div>
+  );
+}

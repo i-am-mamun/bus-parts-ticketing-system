@@ -1,0 +1,716 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #fdfbfb;
+  --foreground: #374151;
+
+  /* Default Global Theme Variables - Crimson Red rgba(236, 30, 33) / #ec1e21 */
+  --theme-primary-50: #fef2f2;
+  --theme-primary-100: #fee2e2;
+  --theme-primary-200: #fecaca;
+  --theme-primary-300: #fca5a5;
+  --theme-primary-400: #f87171;
+  --theme-primary-500: #ef4444;
+  --theme-primary-600: #ec1e21;
+  --theme-primary-700: #cb1518;
+  --theme-primary-800: #a71113;
+  --theme-primary-900: #840e10;
+  --theme-secondary: #cb1518;
+  --theme-accent: #f87171;
+  --theme-glow: rgba(236, 30, 33, 0.35);
+  --theme-gradient: linear-gradient(to right, #cb1518 0%, #ec1e21 50%, #f87171 100%);
+  --theme-button-shadow: 0 4px 14px -1px rgba(236, 30, 33, 0.35), 0 2px 6px -2px rgba(132, 14, 16, 0.25);
+  --theme-page-bg: #fcf6f6;
+}
+
+/* ========================================================================= */
+/* 6 CORE GLOBAL APP THEMES                                                  */
+/* User-selected across Tenant, Business, POS & System UI                    */
+/* ========================================================================= */
+
+/* 1. CRIMSON RED / OCEAN WAVE (Default - rgba(236, 30, 33) / #EC1E21 Design Spec) */
+[data-theme="ocean"], .theme-ocean,
+[data-theme="ocean-teal"], .theme-ocean-teal,
+[data-theme="crimson-red"], .theme-crimson-red {
+  --theme-primary-50: #fef2f2;
+  --theme-primary-100: #fee2e2;
+  --theme-primary-200: #fecaca;
+  --theme-primary-300: #fca5a5;
+  --theme-primary-400: #f87171;
+  --theme-primary-500: #ef4444;
+  --theme-primary-600: #ec1e21;
+  --theme-primary-700: #cb1518;
+  --theme-primary-800: #a71113;
+  --theme-primary-900: #840e10;
+  --theme-secondary: #cb1518;
+  --theme-accent: #f87171;
+  --theme-glow: rgba(236, 30, 33, 0.35);
+  --theme-gradient: linear-gradient(to right, #cb1518 0%, #ec1e21 50%, #f87171 100%);
+  --theme-button-shadow: 0 4px 14px -1px rgba(236, 30, 33, 0.35), 0 2px 6px -2px rgba(132, 14, 16, 0.25);
+  --theme-page-bg: #fcf6f6;
+}
+
+/* 2. ROYAL SAPPHIRE (Azure Ocean Blue - #3B9ADF) */
+[data-theme="royal"], .theme-royal,
+[data-theme="royal-sapphire"], .theme-royal-sapphire {
+  --theme-primary-50: #eff6ff;
+  --theme-primary-100: #dbeafe;
+  --theme-primary-200: #bfdbfe;
+  --theme-primary-300: #93c5fd;
+  --theme-primary-400: #60a5fa;
+  --theme-primary-500: #3b82f6;
+  --theme-primary-600: #2563eb;
+  --theme-primary-700: #1d4ed8;
+  --theme-primary-800: #1e40af;
+  --theme-primary-900: #1e3a8a;
+  --theme-secondary: #1d4ed8;
+  --theme-accent: #60a5fa;
+  --theme-glow: rgba(37, 99, 235, 0.35);
+  --theme-gradient: linear-gradient(to right, #1d4ed8 0%, #2563eb 50%, #38bdf8 100%);
+  --theme-button-shadow: 0 4px 14px -1px rgba(37, 99, 235, 0.35), 0 2px 6px -2px rgba(30, 58, 138, 0.25);
+  --theme-page-bg: #eff6ff;
+}
+
+/* 3. MIDNIGHT VIOLET (Luxury Deep Purple) */
+[data-theme="midnight-violet"], .theme-midnight-violet {
+  --theme-primary-50: #f5f3ff;
+  --theme-primary-100: #ede9fe;
+  --theme-primary-200: #ddd6fe;
+  --theme-primary-300: #c4b5fd;
+  --theme-primary-400: #a78bfa;
+  --theme-primary-500: #8b5cf6;
+  --theme-primary-600: #7c3aed;
+  --theme-primary-700: #6d28d9;
+  --theme-primary-800: #5b21b6;
+  --theme-primary-900: #4c1d95;
+  --theme-secondary: #6d28d9;
+  --theme-accent: #8b5cf6;
+  --theme-glow: rgba(124, 58, 237, 0.35);
+  --theme-gradient: linear-gradient(to right, #6d28d9 0%, #7c3aed 50%, #8b5cf6 100%);
+  --theme-button-shadow: 0 4px 14px -1px rgba(124, 58, 237, 0.35), 0 2px 6px -2px rgba(76, 29, 149, 0.25);
+  --theme-page-bg: #f5f3ff;
+}
+
+/* 4. SLATE CHARCOAL (Minimalist Corporate Dark) */
+[data-theme="slate"], .theme-slate,
+[data-theme="slate-charcoal"], .theme-slate-charcoal {
+  --theme-primary-50: #f8fafc;
+  --theme-primary-100: #f1f5f9;
+  --theme-primary-200: #cbd5e1;
+  --theme-primary-300: #94a3b8;
+  --theme-primary-400: #64748b;
+  --theme-primary-500: #475569;
+  --theme-primary-600: #334155;
+  --theme-primary-700: #1e293b;
+  --theme-primary-800: #0f172a;
+  --theme-primary-900: #020617;
+  --theme-secondary: #1e293b;
+  --theme-accent: #64748b;
+  --theme-glow: rgba(51, 65, 85, 0.35);
+  --theme-gradient: linear-gradient(to right, #0f172a 0%, #334155 50%, #64748b 100%);
+  --theme-button-shadow: 0 4px 14px -1px rgba(51, 65, 85, 0.35), 0 2px 6px -2px rgba(15, 23, 42, 0.25);
+  --theme-page-bg: #f8fafc;
+}
+
+/* ========================================================================= */
+/* 9 BUSINESS VERTICAL THEMES (Tailored for each business type)              */
+/* ========================================================================= */
+
+/* 1. RESTAURANT & CULINARY (Warm Flame Orange) */
+[data-theme="restaurant"], .theme-restaurant {
+  --theme-primary-50: #fff7ed;
+  --theme-primary-100: #ffedd5;
+  --theme-primary-200: #fed7aa;
+  --theme-primary-300: #fdba74;
+  --theme-primary-400: #fb923c;
+  --theme-primary-500: #f97316;
+  --theme-primary-600: #ea580c;
+  --theme-primary-700: #c2410c;
+  --theme-primary-800: #9a3412;
+  --theme-primary-900: #7c2d12;
+  --theme-secondary: #ea580c;
+  --theme-accent: #f59e0b;
+  --theme-glow: rgba(234, 88, 12, 0.35);
+  --theme-gradient: linear-gradient(to right, #ea580c 0%, #f97316 50%, #fb923c 100%);
+  --theme-button-shadow: 0 4px 14px -1px rgba(234, 88, 12, 0.38), 0 2px 6px -2px rgba(124, 45, 18, 0.25);
+  --theme-page-bg: #fff7ed;
+}
+
+/* 2. GROCERY & SUPERMARKET / EMERALD ECO-FLEET */
+[data-theme="emerald"], .theme-emerald,
+[data-theme="emerald-eco"], .theme-emerald-eco,
+[data-theme="grocery"], .theme-grocery {
+  --theme-primary-50: #ecfdf5;
+  --theme-primary-100: #d1fae5;
+  --theme-primary-200: #a7f3d0;
+  --theme-primary-300: #6ee7b7;
+  --theme-primary-400: #34d399;
+  --theme-primary-500: #10b981;
+  --theme-primary-600: #059669;
+  --theme-primary-700: #047857;
+  --theme-primary-800: #065f46;
+  --theme-primary-900: #064e3b;
+  --theme-secondary: #047857;
+  --theme-accent: #10b981;
+  --theme-glow: rgba(5, 150, 105, 0.35);
+  --theme-gradient: linear-gradient(to right, #047857 0%, #059669 50%, #34d399 100%);
+  --theme-button-shadow: 0 4px 14px -1px rgba(5, 150, 105, 0.38), 0 2px 6px -2px rgba(6, 78, 59, 0.25);
+  --theme-page-bg: #f0fdf4;
+}
+
+/* 3. PHARMACY & HEALTH (Clinical Cyan) */
+[data-theme="pharmacy"], .theme-pharmacy {
+  --theme-primary-50: #ecfeff;
+  --theme-primary-100: #cffafe;
+  --theme-primary-200: #a5f3fc;
+  --theme-primary-300: #67e8f9;
+  --theme-primary-400: #22d3ee;
+  --theme-primary-500: #06b6d4;
+  --theme-primary-600: #0891b2;
+  --theme-primary-700: #0e7490;
+  --theme-primary-800: #155e75;
+  --theme-primary-900: #164e63;
+  --theme-secondary: #0891b2;
+  --theme-accent: #3b82f6;
+  --theme-glow: rgba(8, 145, 178, 0.35);
+  --theme-gradient: linear-gradient(to right, #0891b2 0%, #06b6d4 50%, #22d3ee 100%);
+  --theme-button-shadow: 0 4px 14px -1px rgba(8, 145, 178, 0.38), 0 2px 6px -2px rgba(22, 78, 99, 0.25);
+  --theme-page-bg: #ecfeff;
+}
+
+/* 4. RETAIL & APPAREL (Royal Blue) */
+[data-theme="retail"], .theme-retail {
+  --theme-primary-50: #eff6ff;
+  --theme-primary-100: #dbeafe;
+  --theme-primary-200: #bfdbfe;
+  --theme-primary-300: #93c5fd;
+  --theme-primary-400: #60a5fa;
+  --theme-primary-500: #3b82f6;
+  --theme-primary-600: #2563eb;
+  --theme-primary-700: #1d4ed8;
+  --theme-primary-800: #1e40af;
+  --theme-primary-900: #1e3a8a;
+  --theme-secondary: #2563eb;
+  --theme-accent: #8b5cf6;
+  --theme-glow: rgba(37, 99, 235, 0.35);
+  --theme-gradient: linear-gradient(to right, #1d4ed8 0%, #2563eb 50%, #60a5fa 100%);
+  --theme-button-shadow: 0 4px 14px -1px rgba(37, 99, 235, 0.38), 0 2px 6px -2px rgba(30, 58, 138, 0.25);
+  --theme-page-bg: #eff6ff;
+}
+
+/* 5. WHOLESALE & DISTRIBUTION (Vibrant Action Blue) */
+[data-theme="wholesale"], .theme-wholesale {
+  --theme-primary-50: #f0f7ff;
+  --theme-primary-100: #e0effe;
+  --theme-primary-200: #b9ddfe;
+  --theme-primary-300: #7cc2fd;
+  --theme-primary-400: #36a3f9;
+  --theme-primary-500: #0066ff;
+  --theme-primary-600: #0052cc;
+  --theme-primary-700: #0040a3;
+  --theme-primary-800: #003380;
+  --theme-primary-900: #002660;
+  --theme-secondary: #0052cc;
+  --theme-accent: #3b82f6;
+  --theme-glow: rgba(0, 102, 255, 0.35);
+  --theme-gradient: linear-gradient(to right, #0052cc 0%, #0066ff 50%, #38bdf8 100%);
+  --theme-button-shadow: 0 4px 14px -1px rgba(0, 102, 255, 0.38), 0 2px 6px -2px rgba(0, 38, 96, 0.25);
+  --theme-page-bg: #f0f7ff;
+}
+
+/* 6. SALON & BEAUTY SPA (Glamour Rose) */
+[data-theme="salon"], .theme-salon {
+  --theme-primary-50: #fff1f2;
+  --theme-primary-100: #ffe4e6;
+  --theme-primary-200: #fecdd3;
+  --theme-primary-300: #fda4af;
+  --theme-primary-400: #fb7185;
+  --theme-primary-500: #f43f5e;
+  --theme-primary-600: #e11d48;
+  --theme-primary-700: #be123c;
+  --theme-primary-800: #9f1239;
+  --theme-primary-900: #881337;
+  --theme-secondary: #e11d48;
+  --theme-accent: #ec4899;
+  --theme-glow: rgba(225, 29, 72, 0.35);
+  --theme-gradient: linear-gradient(to right, #be123c 0%, #e11d48 50%, #fb7185 100%);
+  --theme-button-shadow: 0 4px 14px -1px rgba(225, 29, 72, 0.38), 0 2px 6px -2px rgba(136, 19, 55, 0.25);
+  --theme-page-bg: #fff1f2;
+}
+
+/* 7. MANUFACTURING & BAKERY (Amber Gold) */
+[data-theme="manufacturing"], .theme-manufacturing {
+  --theme-primary-50: #fffbeb;
+  --theme-primary-100: #fef3c7;
+  --theme-primary-200: #fde68a;
+  --theme-primary-300: #fcd34d;
+  --theme-primary-400: #fbbf24;
+  --theme-primary-500: #f59e0b;
+  --theme-primary-600: #d97706;
+  --theme-primary-700: #b45309;
+  --theme-primary-800: #92400e;
+  --theme-primary-900: #78350f;
+  --theme-secondary: #d97706;
+  --theme-accent: #b45309;
+  --theme-glow: rgba(217, 119, 6, 0.35);
+  --theme-gradient: linear-gradient(to right, #b45309 0%, #d97706 50%, #fbbf24 100%);
+  --theme-button-shadow: 0 4px 14px -1px rgba(217, 119, 6, 0.38), 0 2px 6px -2px rgba(120, 53, 15, 0.25);
+  --theme-page-bg: #fffbeb;
+}
+
+/* 8. REPAIR & SERVICE (Electric Violet) */
+[data-theme="repair"], .theme-repair {
+  --theme-primary-50: #f5f3ff;
+  --theme-primary-100: #ede9fe;
+  --theme-primary-200: #ddd6fe;
+  --theme-primary-300: #c4b5fd;
+  --theme-primary-400: #a78bfa;
+  --theme-primary-500: #8b5cf6;
+  --theme-primary-600: #7c3aed;
+  --theme-primary-700: #6d28d9;
+  --theme-primary-800: #5b21b6;
+  --theme-primary-900: #4c1d95;
+  --theme-secondary: #7c3aed;
+  --theme-accent: #6366f1;
+  --theme-glow: rgba(124, 58, 237, 0.35);
+  --theme-gradient: linear-gradient(to right, #6d28d9 0%, #7c3aed 50%, #a78bfa 100%);
+  --theme-button-shadow: 0 4px 14px -1px rgba(124, 58, 237, 0.38), 0 2px 6px -2px rgba(76, 29, 149, 0.25);
+  --theme-page-bg: #f5f3ff;
+}
+
+/* 9. FRANCHISE & ENTERPRISE (Corporate Slate) */
+[data-theme="franchise"], .theme-franchise {
+  --theme-primary-50: #f8fafc;
+  --theme-primary-100: #f1f5f9;
+  --theme-primary-200: #e2e8f0;
+  --theme-primary-300: #cbd5e1;
+  --theme-primary-400: #94a3b8;
+  --theme-primary-500: #64748b;
+  --theme-primary-600: #475569;
+  --theme-primary-700: #334155;
+  --theme-primary-800: #1e293b;
+  --theme-primary-900: #0f172a;
+  --theme-secondary: #475569;
+  --theme-accent: #0f172a;
+  --theme-glow: rgba(51, 65, 85, 0.35);
+  --theme-gradient: linear-gradient(to right, #1e293b 0%, #334155 50%, #475569 100%);
+  --theme-button-shadow: 0 4px 14px -1px rgba(51, 65, 85, 0.38), 0 2px 6px -2px rgba(15, 23, 42, 0.25);
+  --theme-page-bg: #f1f5f9;
+}
+
+/*
+  Global color system for BUS Inventory Management.
+  Every component should reference these tokens or CSS variables.
+*/
+@theme {
+  --color-primary-50: var(--theme-primary-50);
+  --color-primary-100: var(--theme-primary-100);
+  --color-primary-200: var(--theme-primary-200);
+  --color-primary-300: var(--theme-primary-300);
+  --color-primary-400: var(--theme-primary-400);
+  --color-primary-500: var(--theme-primary-500);
+  --color-primary-600: var(--theme-primary-600);
+  --color-primary-700: var(--theme-primary-700);
+  --color-primary-800: var(--theme-primary-800);
+  --color-primary-900: var(--theme-primary-900);
+  --color-primary: var(--theme-primary-600);
+  --color-primary-hover: var(--theme-primary-700);
+
+  --color-brand-50: var(--theme-primary-50);
+  --color-brand-100: var(--theme-primary-100);
+  --color-brand-200: var(--theme-primary-200);
+  --color-brand-300: var(--theme-primary-300);
+  --color-brand-400: var(--theme-primary-400);
+  --color-brand-500: var(--theme-primary-500);
+  --color-brand-600: var(--theme-primary-600);
+  --color-brand-700: var(--theme-primary-700);
+  --color-brand-800: var(--theme-primary-800);
+  --color-brand-900: var(--theme-primary-900);
+  --color-brand-primary: var(--theme-primary-600);
+  --color-brand-secondary: var(--theme-secondary);
+  --color-brand-accent: var(--theme-accent);
+
+  --color-ink-50: #eef6fb;
+  --color-ink-100: #d9ebf5;
+  --color-ink-200: #b3d7ea;
+  --color-ink-300: #82b9d9;
+  --color-ink-400: #4e94bd;
+  --color-ink-500: #2e73a0;
+  --color-ink-600: #225d86;
+  --color-ink-700: #1d4d70;
+  --color-ink-800: #1a3f5c;
+  --color-ink-900: #142f46;
+  --color-ink-950: #0b1d2e;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  /* Default border color — prevents bare 'border', 'border-t', etc. from rendering as black */
+  --default-border-color: #e2e8f0;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+/* Globally override the Tailwind v4 default border color so any bare
+   border/border-t/border-b/border-l/border-r never falls back to currentColor (black).
+   slate-200 (#e2e8f0) is the standard subtle divider across the entire app. */
+@layer base {
+  *, ::before, ::after {
+    border-color: #e2e8f0;
+  }
+}
+
+/* ========================================================================= */
+/* DYNAMIC GLOBAL BRAND UTILITY TOKENS (Single Source of Truth)              */
+/* ========================================================================= */
+.bg-brand-primary {
+  background-color: var(--theme-primary-600);
+}
+.bg-brand-primary-hover:hover {
+  background-color: var(--theme-primary-700);
+}
+.bg-brand-gradient {
+  background: var(--theme-gradient, linear-gradient(to right, var(--theme-primary-600) 0%, var(--theme-primary-500) 50%, var(--theme-accent) 100%));
+}
+.shadow-brand-button {
+  box-shadow: var(--theme-button-shadow, 0 4px 14px -1px rgba(236, 30, 33, 0.35), 0 2px 6px -2px rgba(132, 14, 16, 0.25));
+}
+.bg-brand-50 {
+  background-color: var(--theme-primary-50);
+}
+.bg-brand-100 {
+  background-color: var(--theme-primary-100);
+}
+.text-brand-primary {
+  color: var(--theme-primary-600);
+}
+.text-brand-dark {
+  color: var(--theme-primary-700);
+}
+.text-brand-accent {
+  color: var(--theme-accent);
+}
+.border-brand-border {
+  border-color: var(--theme-primary-200) !important;
+}
+.border-brand-light {
+  border-color: var(--theme-primary-100) !important;
+}
+.border-brand-primary {
+  border-color: var(--theme-primary-600) !important;
+}
+
+/* Theme-adaptive Search input and pill borders */
+.theme-search-input {
+  border: 1px solid var(--theme-primary-200, #fecaca) !important;
+  background-color: #ffffff !important;
+  outline: none !important;
+  box-shadow: none !important;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.theme-search-input:hover {
+  border-color: var(--theme-primary-400, #f87171) !important;
+}
+.theme-search-input:focus,
+.theme-search-input:focus-visible,
+.theme-search-input:focus-within {
+  outline: none !important;
+  border-color: var(--theme-primary-500, #ef4444) !important;
+  box-shadow: 0 0 0 2px var(--theme-primary-100, rgba(236, 30, 33, 0.2)) !important;
+}
+
+.theme-search-pill {
+  border: 1px solid var(--theme-primary-200, #fecaca) !important;
+  background-color: rgba(255, 255, 255, 0.95);
+  outline: none !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+  transition: border-color 0.15s ease-in-out, background-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.theme-search-pill:hover {
+  border-color: var(--theme-primary-400, #f87171) !important;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 2px var(--theme-primary-100, rgba(236, 30, 33, 0.15));
+}
+.theme-search-pill:focus,
+.theme-search-pill:focus-visible {
+  outline: none !important;
+  border-color: var(--theme-primary-500, #ef4444) !important;
+  box-shadow: 0 0 0 2px var(--theme-primary-100, rgba(236, 30, 33, 0.25)) !important;
+}
+
+.hover\:bg-brand-50:hover {
+  background-color: var(--theme-primary-50);
+}
+.hover\:bg-brand-100:hover {
+  background-color: var(--theme-primary-100);
+}
+.hover\:border-brand-primary:hover {
+  border-color: var(--theme-primary-600);
+}
+.hover\:text-brand-dark:hover {
+  color: var(--theme-primary-700);
+}
+.hover\:text-brand-primary:hover {
+  color: var(--theme-primary-600);
+}
+
+button:not(:disabled),
+select:not(:disabled),
+input[type="submit"]:not(:disabled),
+input[type="button"]:not(:disabled),
+[role="button"]:not(:disabled) {
+  cursor: pointer;
+}
+
+/* Smooth, reusable enter animations for overlays (modal, dropdown, popover). */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-14px) translateX(10px);
+  }
+}
+
+@keyframes float-orbit {
+  0%, 100% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  25% {
+    transform: translate(16px, -18px) scale(1.06) rotate(6deg);
+  }
+  50% {
+    transform: translate(-12px, -24px) scale(0.96) rotate(-4deg);
+  }
+  75% {
+    transform: translate(-18px, 12px) scale(1.03) rotate(3deg);
+  }
+}
+
+@keyframes icon-blink {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.08);
+  }
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #e2e8f0 transparent;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #e2e8f0;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #cbd5e1;
+}
+
+/* ── Ultra-thin, light scrollbar for dense panels (modals, lists, main area) ── */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #dbeafe transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #dbeafe;
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #bfdbfe;
+}
+
+/* ── Fully hidden scrollbar — content stays scrollable, no visible bar ── */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Glassmorphism & premium UI helpers */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.glass-panel-dark {
+  background: rgba(15, 31, 43, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ========================================================================= */
+/* GLOBAL PRINT ENGINE: Supports A4 Vouchers, Slips & 80mm POS Thermal Receipts */
+/* ========================================================================= */
+@media print {
+  /* Default: hide all background app chrome and navigation */
+  body * {
+    visibility: hidden;
+  }
+
+  /* 1. Thermal POS Receipt (80mm & 58mm) */
+  #thermal-receipt,
+  #thermal-receipt *,
+  #thermal-receipt-view,
+  #thermal-receipt-view * {
+    visibility: visible;
+  }
+  
+  #thermal-receipt,
+  #thermal-receipt-view {
+    position: fixed !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    top: 5mm !important;
+    width: 78mm !important;
+    max-width: 78mm !important;
+    padding: 3mm 2mm !important;
+    margin: 0 !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
+    font-size: 11.5px !important;
+    line-height: 1.35 !important;
+    color: #000 !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    border: none !important;
+    z-index: 9999999 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* 2. Enterprise Documents, A4 Invoices & Purchasing Voucher Slips */
+  #printable-slip,
+  #printable-slip *,
+  #printable-invoice,
+  #printable-invoice *,
+  .printable-document,
+  .printable-document * {
+    visibility: visible;
+  }
+
+  #printable-slip,
+  #printable-invoice,
+  .printable-document {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    padding: 10mm 12mm !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: #ffffff !important;
+    color: #1e293b !important;
+    overflow: visible !important;
+    max-height: none !important;
+    height: auto !important;
+    display: block !important;
+    z-index: 99999 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide print buttons, close buttons, modal backdrops in print */
+  .no-print {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* 3. Restaurant Bill Print Receipt */
+  #restaurant-receipt,
+  #restaurant-receipt * {
+    visibility: visible !important;
+  }
+
+  #restaurant-receipt {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 16px !important;
+    background: #ffffff !important;
+    color: #4b5563 !important;
+    box-shadow: none !important;
+    border: none !important;
+    overflow: visible !important;
+    max-height: none !important;
+    height: auto !important;
+    display: block !important;
+    z-index: 99999 !important;
+    border-radius: 0 !important;
+  }
+
+  @page {
+    margin: 10mm 12mm;
+    size: auto;
+  }
+}
+
+
