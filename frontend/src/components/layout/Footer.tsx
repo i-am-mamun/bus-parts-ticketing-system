@@ -33,7 +33,7 @@ export function Footer() {
   }, []);
 
   return (
-    <footer className="relative shrink-0 w-full select-none z-20 bg-white/95 backdrop-blur-md rounded-tl-2xl border-t border-l border-brand-border/70 shadow-[0_-2px_10px_var(--theme-glow,rgba(236,30,33,0.08))] overflow-hidden">
+    <footer className="relative shrink-0 w-full select-none z-20 bg-white/95 backdrop-blur-md rounded-tl-2xl border-t border-l border-brand-border/70 shadow-[0_-2px_10px_var(--theme-glow,rgba(236,30,33,0.08))] overflow-hidden print:hidden">
       {/* ── Prominent Multi-Layer Wave Accent on Right Corner ── */}
       <div className="pointer-events-none absolute right-0 inset-y-0 w-72 sm:w-96 md:w-[480px] lg:w-[600px] xl:w-[720px] z-0 overflow-hidden">
         <svg

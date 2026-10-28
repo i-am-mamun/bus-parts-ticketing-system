@@ -117,6 +117,118 @@ class BusIn(BaseModel):
     notes: Optional[str] = None
 
 
+# ── Warehouses & Storage Bins ───────────────────────────────────────────────
+class WarehouseIn(BaseModel):
+    branch_id: int
+    name: str = Field(min_length=1)
+    code: str = Field(min_length=1)
+    location: Optional[str] = "Main Depot"
+    warehouse_type: Optional[str] = "Spares Store"
+    is_location_based: bool = True
+    is_active: bool = True
+
+
+class WarehouseOut(BaseModel):
+    id: int
+    branch_id: int
+    branch_name: Optional[str] = None
+    name: str
+    code: str
+    location: Optional[str] = None
+    warehouse_type: str = "Spares Store"
+    is_location_based: bool = True
+    is_active: bool = True
+    total_bins: int = 0
+    created_at: Optional[datetime] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class LocationBinIn(BaseModel):
+    row_code: Optional[str] = "R01"
+    col_code: Optional[str] = "C01"
+    rack_code: Optional[str] = "RK01"
+    bin_code: Optional[str] = "B01"
+    name: Optional[str] = None
+    loc_type: Optional[str] = "STANDARD"
+    max_capacity: Optional[int] = None
+    status: Optional[str] = "ACTIVE"
+
+
+class BulkGenerateBinsIn(BaseModel):
+    rows: int = Field(default=2, ge=1, le=20)
+    cols: int = Field(default=2, ge=1, le=20)
+    racks: int = Field(default=3, ge=1, le=20)
+    bins: int = Field(default=2, ge=1, le=20)
+
+
+class LocationBinOut(BaseModel):
+    id: int
+    warehouse_id: int
+    row_code: str
+    col_code: str
+    rack_code: str
+    bin_code: str
+    full_code: str
+    name: str
+    loc_type: str = "STANDARD"
+    max_capacity: Optional[int] = None
+    status: str = "ACTIVE"
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class HierarchyRack(BaseModel):
+    rack_code: str
+    bins: List[LocationBinOut]
+
+
+class HierarchyCol(BaseModel):
+    col_code: str
+    racks: List[HierarchyRack]
+
+
+class HierarchyRow(BaseModel):
+    row_code: str
+    cols: List[HierarchyCol]
+
+
+class WarehouseLocationsPayload(BaseModel):
+    warehouse: WarehouseOut
+    total_bins: int
+    locations: List[LocationBinOut]
+    hierarchy: List[HierarchyRow]
+
+
+# ── Suppliers Directory ─────────────────────────────────────────────────────
+class SupplierIn(BaseModel):
+    name: str = Field(min_length=1)
+    contact_person: Optional[str] = None
+    phone: Optional[str] = None
+    email: Optional[str] = None
+    address: Optional[str] = None
+    supplied_categories: Optional[str] = None
+    rating: float = Field(default=5.0, ge=1.0, le=5.0)
+    notes: Optional[str] = None
+    is_active: bool = True
+
+
+class SupplierOut(BaseModel):
+    id: int
+    name: str
+    contact_person: Optional[str] = None
+    phone: Optional[str] = None
+    email: Optional[str] = None
+    address: Optional[str] = None
+    supplied_categories: Optional[str] = None
+    rating: float = 5.0
+    notes: Optional[str] = None
+    is_active: bool = True
+    created_at: Optional[datetime] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
 # ── Tickets ─────────────────────────────────────────────────────────────────
 class TicketItemIn(BaseModel):
     part_name: str = Field(min_length=1)

@@ -208,7 +208,7 @@ export function Header() {
 
   return (
     <>
-      <header className="relative flex h-16 shrink-0 items-center justify-between px-3 sm:px-4 md:px-6 z-30 select-none bg-transparent">
+      <header className="relative flex h-16 shrink-0 items-center justify-between px-3 sm:px-4 md:px-6 z-30 select-none bg-transparent print:hidden">
         {/* Dual Side 3-Layer Ocean Wave Curves Background */}
         <div className="pointer-events-none absolute inset-0 w-full h-full z-0 overflow-hidden">
           {/* Top-Left 3-Layer Ocean Wave Curves (Behind Logo) */}

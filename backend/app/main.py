@@ -16,7 +16,9 @@ from app.rbac_service import ensure_rbac_seeded
 from app.routers.auth_users import audit_router, auth_router, settings_router, users_router
 from app.routers.fleet import router as fleet_router
 from app.routers.rbac import router as rbac_router
+from app.routers.suppliers import router as suppliers_router
 from app.routers.tickets import router as tickets_router
+from app.routers.warehouses import router as warehouses_router
 from app.seed import ensure_admin
 
 logging.basicConfig(level=logging.INFO)
@@ -78,6 +80,8 @@ app.include_router(settings_router)
 app.include_router(audit_router)
 app.include_router(rbac_router)
 app.include_router(fleet_router)
+app.include_router(warehouses_router)
+app.include_router(suppliers_router)
 app.include_router(tickets_router)
 
 

@@ -178,6 +178,7 @@ export interface Ticket {
   priority: TicketPriority;
   status: TicketStatus;
   bus_id?: number | null;
+  to_bus_id?: number | null;
   bus?: { id: number; bus_no: string; name?: string; route?: string; odometer_km?: number; status?: string } | null;
   to_bus?: { id: number; bus_no: string; name?: string; route?: string; odometer_km?: number; status?: string } | null;
   branch?: { id: number; name: string; code: string } | null;
@@ -249,4 +250,68 @@ export interface TicketSummary {
   recent: Ticket[];
   daily: { date: string; count: number }[];
   top_buses: { bus_no: string; tickets: number; cost?: number | null }[];
+}
+
+export interface Warehouse {
+  id: number;
+  branch_id: number;
+  branch_name?: string | null;
+  name: string;
+  code: string;
+  location?: string | null;
+  warehouse_type: string;
+  is_location_based: boolean;
+  is_active: boolean;
+  total_bins?: number;
+  created_at?: string | null;
+}
+
+export interface LocationBin {
+  id: number;
+  warehouse_id: number;
+  row_code: string;
+  col_code: string;
+  rack_code: string;
+  bin_code: string;
+  full_code: string;
+  name: string;
+  loc_type: string;
+  max_capacity?: number | null;
+  status: string;
+}
+
+export interface HierarchyRack {
+  rack_code: string;
+  bins: LocationBin[];
+}
+
+export interface HierarchyCol {
+  col_code: string;
+  racks: HierarchyRack[];
+}
+
+export interface HierarchyRow {
+  row_code: string;
+  cols: HierarchyCol[];
+}
+
+export interface WarehouseLocationsPayload {
+  warehouse: Warehouse;
+  total_bins: number;
+  locations: LocationBin[];
+  hierarchy: HierarchyRow[];
+}
+
+export interface Supplier {
+  id: number;
+  name: string;
+  contact_person?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  address?: string | null;
+  supplied_categories?: string | null;
+  rating: number;
+  notes?: string | null;
+  is_active: boolean;
+  created_at?: string | null;
 }

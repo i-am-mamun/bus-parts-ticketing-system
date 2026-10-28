@@ -71,12 +71,12 @@ export default function UsersPage() {
       const [usersRes, rolesRes, branchesRes] = await Promise.all([
         api.get<{ items: User[]; total: number }>("/api/v1/users?page_size=100"),
         api.get<RoleOption[]>("/api/v1/rbac/roles").catch(() => []),
-        api.get<{ items: Branch[] }>("/api/v1/branches?page_size=100").catch(() => ({ items: [] })),
+        api.get<any>("/api/v1/branches?page_size=100").catch(() => []),
       ]);
 
       setUsers(usersRes.items || []);
       setRoles(rolesRes || []);
-      setBranches(branchesRes.items || []);
+      setBranches(Array.isArray(branchesRes) ? branchesRes : (branchesRes?.items || []));
     } catch (err) {
       console.error("Failed to load staff accounts:", err);
     } finally {

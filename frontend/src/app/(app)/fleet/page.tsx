@@ -58,7 +58,7 @@ export default function FleetPage() {
         api.get<any>("/api/v1/branches?page_size=100"),
       ]);
       setBuses(busRes.items || []);
-      setBranches(branchRes.items || []);
+      setBranches(Array.isArray(branchRes) ? branchRes : (branchRes?.items || []));
     } catch (err) {
       console.error("Failed to load fleet data:", err);
     } finally {

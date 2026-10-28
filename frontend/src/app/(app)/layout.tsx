@@ -81,35 +81,37 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <LanguageProvider>
       <div
-        className="flex h-screen flex-col overflow-hidden transition-colors duration-300"
+        className="flex h-screen print:h-auto print:overflow-visible flex-col overflow-hidden transition-colors duration-300 print:bg-white"
         style={{ backgroundColor: "var(--theme-page-bg, #edf5fd)" }}
       >
         <Header />
-        <div className="flex flex-1 overflow-hidden min-h-0 relative">
-          <Suspense fallback={<div className="w-64 shrink-0 bg-white border-r border-brand-border" />}>
+        <div className="flex flex-1 print:flex-none print:overflow-visible overflow-hidden min-h-0 relative print:static">
+          <Suspense fallback={<div className="w-64 shrink-0 bg-white border-r border-brand-border h-full print:hidden" />}>
             <Sidebar />
           </Suspense>
-          <div className="flex flex-1 flex-col overflow-hidden min-w-0">
-            <main className="flex-1 overflow-y-auto p-3 sm:p-4 lg:p-5 pb-10 custom-scrollbar">
-              <div className="min-h-full w-full rounded-2xl border border-brand-border/60 bg-white/95 p-4 sm:p-6 shadow-xs">
+          <div className="flex flex-1 print:flex-none print:overflow-visible flex-col overflow-hidden min-w-0">
+            <main className="flex-1 print:flex-none print:overflow-visible overflow-y-auto p-3 sm:p-4 lg:p-5 pb-10 custom-scrollbar print:p-0 print:overflow-visible">
+              <div className="min-h-full print:min-h-0 w-full rounded-2xl print:rounded-none border print:border-none border-brand-border/60 bg-white/95 print:bg-white p-4 sm:p-6 print:p-0 shadow-xs print:shadow-none">
                 {children}
               </div>
             </main>
             <Footer />
           </div>
         </div>
-        <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="colored"
-        />
+        <div className="print:hidden">
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="colored"
+          />
+        </div>
       </div>
     </LanguageProvider>
   );

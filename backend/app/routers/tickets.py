@@ -315,14 +315,18 @@ def _ensure_approvals(t: Ticket) -> None:
 
 
 # ── List / summary ──────────────────────────────────────────────────────────
-def _list_stmt(user: User, perms: set[str], q, type, status, bus_id, priority, mine, pending_me, date_from, date_to):
+def _list_stmt(user: User, perms: set[str], q, type, status, bus_id, priority, mine, pending_me, date_from, date_to, is_premature=None, bus_no=None):
     stmt = select(Ticket).options(selectinload(Ticket.items), selectinload(Ticket.attachments))
+    if q or bus_no:
+        stmt = stmt.outerjoin(Bus, Ticket.bus_id == Bus.id)
     if q:
         like = f"%{q.strip()}%"
-        stmt = stmt.outerjoin(Bus, Ticket.bus_id == Bus.id).where(
+        stmt = stmt.where(
             or_(Ticket.ticket_no.ilike(like), Ticket.title.ilike(like), Bus.bus_no.ilike(like),
                 Ticket.created_by_name.ilike(like))
         )
+    if bus_no:
+        stmt = stmt.where(Bus.bus_no.ilike(f"%{bus_no.strip()}%"))
     if type:
         stmt = stmt.where(Ticket.type == type)
     if status:
@@ -333,6 +337,8 @@ def _list_stmt(user: User, perms: set[str], q, type, status, bus_id, priority, m
         stmt = stmt.where(Ticket.priority == priority)
     if mine:
         stmt = stmt.where(Ticket.created_by_id == user.id)
+    if is_premature is not None:
+        stmt = stmt.where(Ticket.is_premature == is_premature)
     if pending_me:
         statuses = _status_for_user(perms, user)
         stmt = stmt.where(Ticket.status.in_(statuses or ["__none__"]))
@@ -351,9 +357,11 @@ def list_tickets(
     type: Optional[str] = None,
     status: Optional[str] = None,
     bus_id: Optional[int] = None,
+    bus_no: Optional[str] = None,
     priority: Optional[str] = None,
     mine: bool = False,
     pending_me: bool = False,
+    is_premature: Optional[bool] = None,
     date_from: Optional[date] = None,
     date_to: Optional[date] = None,
     page: int = Query(1, ge=1),
@@ -364,7 +372,7 @@ def list_tickets(
     perms = user_permissions(user, db)
     if not _has(perms, "tickets.view"):
         raise HTTPException(403, "You do not have permission to view tickets")
-    stmt = _list_stmt(user, perms, q, type, status, bus_id, priority, mine, pending_me, date_from, date_to)
+    stmt = _list_stmt(user, perms, q, type, status, bus_id, priority, mine, pending_me, date_from, date_to, is_premature, bus_no)
     total = db.scalar(select(func.count()).select_from(stmt.order_by(None).subquery())) or 0
     rows = db.scalars(stmt.order_by(Ticket.id.desc()).offset((page - 1) * page_size).limit(page_size)).unique().all()
     show_cost = _has(perms, "tickets.cost")

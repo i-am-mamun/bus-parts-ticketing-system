@@ -243,13 +243,13 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
   const step3 = ticket.approvals?.find((a) => a.step === 3);
 
   return (
-    <div className="space-y-6 pb-16">
+    <div id="printable-slip" className="printable-document space-y-6 pb-16">
       {/* ── Top Header & Actions ── */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-brand-border/60 pb-4">
         <div className="flex items-center gap-3">
           <Link
             href="/tickets"
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50 transition shrink-0"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50 transition shrink-0 print:hidden no-print"
             title={lang === "bn" ? "টিকিট তালিকায় ফিরুন" : "Back to Tickets"}
           >
             <ArrowLeft size={16} />
@@ -289,7 +289,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
         <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={() => window.print()}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-slate-200 bg-white text-xs font-bold text-slate-700 hover:bg-slate-50 shadow-2xs transition cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-slate-200 bg-white text-xs font-bold text-slate-700 hover:bg-slate-50 shadow-2xs transition cursor-pointer print:hidden no-print"
           >
             <Printer size={14} className="text-brand-primary" />
             <span>{lang === "bn" ? "অফিসিয়াল স্লিপ প্রিন্ট" : "Print Official Slip"}</span>
@@ -339,7 +339,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 relative">
           {/* ── Step 1: Store / Garage Incharge ── */}
           <div
-            className={`p-3.5 sm:p-4 rounded-xl border flex flex-col justify-between transition-all ${
+            className={`p-3.5 sm:p-4 rounded-xl border flex flex-col justify-between transition-all overflow-hidden ${
               step1?.status === "DONE"
                 ? "bg-emerald-50/60 border-emerald-300"
                 : step1?.status === "REJECTED"
@@ -384,23 +384,26 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
               )}
             </div>
 
-            {can.verify && (
-              <div className="mt-4 pt-2 border-t border-amber-200 flex items-center gap-2">
-                <CustomButton
-                  size="xs"
-                  variant="primary"
-                  onClick={() => setVerifyModal(true)}
-                  className="w-full text-xs font-bold py-1.5"
-                >
-                  {lang === "bn" ? "যাচাই করুন" : "Verify Now"}
-                </CustomButton>
+            {(can.verify || (ticket.status === "SUBMITTED" && can.reject)) && (
+              <div className="mt-4 pt-2 border-t border-amber-200/80 flex items-center gap-2">
+                {can.verify && (
+                  <CustomButton
+                    size="xs"
+                    variant="primary"
+                    onClick={() => setVerifyModal(true)}
+                    className="flex-1 text-xs font-bold py-1.5 justify-center shadow-xs"
+                  >
+                    {lang === "bn" ? "যাচাই করুন" : "Verify Now"}
+                  </CustomButton>
+                )}
                 {can.reject && (
                   <CustomButton
                     size="xs"
                     variant="outline"
                     onClick={() => setRejectModal(true)}
-                    className="text-rose-600 border-rose-200 hover:bg-rose-50"
+                    className="shrink-0 text-xs font-bold py-1.5 px-3 text-rose-600 border border-rose-300 hover:bg-rose-50 hover:border-rose-400 rounded-lg transition"
                   >
+                    <XCircle size={12} className="mr-1 text-rose-500" />
                     {lang === "bn" ? "বাতিল" : "Reject"}
                   </CustomButton>
                 )}
@@ -410,7 +413,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
 
           {/* ── Step 2: Operations / Depot Manager ── */}
           <div
-            className={`p-3.5 sm:p-4 rounded-xl border flex flex-col justify-between transition-all ${
+            className={`p-3.5 sm:p-4 rounded-xl border flex flex-col justify-between transition-all overflow-hidden ${
               step2?.status === "DONE"
                 ? "bg-emerald-50/60 border-emerald-300"
                 : step2?.status === "REJECTED"
@@ -455,23 +458,26 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
               )}
             </div>
 
-            {can.approve && (
-              <div className="mt-4 pt-2 border-t border-amber-200 flex items-center gap-2">
-                <CustomButton
-                  size="xs"
-                  variant="primary"
-                  onClick={() => setApproveModal(true)}
-                  className="w-full text-xs font-bold py-1.5"
-                >
-                  {lang === "bn" ? "অনুমোদন দিন" : "Approve"}
-                </CustomButton>
+            {(can.approve || (ticket.status === "VERIFIED" && can.reject)) && (
+              <div className="mt-4 pt-2 border-t border-amber-200/80 flex items-center gap-2">
+                {can.approve && (
+                  <CustomButton
+                    size="xs"
+                    variant="primary"
+                    onClick={() => setApproveModal(true)}
+                    className="flex-1 text-xs font-bold py-1.5 justify-center shadow-xs"
+                  >
+                    {lang === "bn" ? "অনুমোদন দিন" : "Approve"}
+                  </CustomButton>
+                )}
                 {can.reject && (
                   <CustomButton
                     size="xs"
                     variant="outline"
                     onClick={() => setRejectModal(true)}
-                    className="text-rose-600 border-rose-200 hover:bg-rose-50"
+                    className="shrink-0 text-xs font-bold py-1.5 px-3 text-rose-600 border border-rose-300 hover:bg-rose-50 hover:border-rose-400 rounded-lg transition"
                   >
+                    <XCircle size={12} className="mr-1 text-rose-500" />
                     {lang === "bn" ? "বাতিল" : "Reject"}
                   </CustomButton>
                 )}
@@ -481,7 +487,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
 
           {/* ── Step 3: Executive Admin Final Approval ── */}
           <div
-            className={`p-3.5 sm:p-4 rounded-xl border flex flex-col justify-between transition-all ${
+            className={`p-3.5 sm:p-4 rounded-xl border flex flex-col justify-between transition-all overflow-hidden ${
               step3?.status === "DONE"
                 ? "bg-emerald-50/60 border-emerald-300"
                 : step3?.status === "REJECTED"
@@ -526,23 +532,26 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
               )}
             </div>
 
-            {can.final_approve && (
-              <div className="mt-4 pt-2 border-t border-amber-200 flex items-center gap-2">
-                <CustomButton
-                  size="xs"
-                  variant="primary"
-                  onClick={() => setFinalApproveModal(true)}
-                  className="w-full text-xs font-bold py-1.5"
-                >
-                  {lang === "bn" ? "চূড়ান্ত অনুমোদন" : "Final Approve"}
-                </CustomButton>
+            {(can.final_approve || (ticket.status === "APPROVED" && can.reject)) && (
+              <div className="mt-4 pt-2 border-t border-amber-200/80 flex items-center gap-2">
+                {can.final_approve && (
+                  <CustomButton
+                    size="xs"
+                    variant="primary"
+                    onClick={() => setFinalApproveModal(true)}
+                    className="flex-1 text-xs font-bold py-1.5 justify-center shadow-xs"
+                  >
+                    {lang === "bn" ? "চূড়ান্ত অনুমোদন" : "Final Approve"}
+                  </CustomButton>
+                )}
                 {can.reject && (
                   <CustomButton
                     size="xs"
                     variant="outline"
                     onClick={() => setRejectModal(true)}
-                    className="text-rose-600 border-rose-200 hover:bg-rose-50"
+                    className="shrink-0 text-xs font-bold py-1.5 px-3 text-rose-600 border border-rose-300 hover:bg-rose-50 hover:border-rose-400 rounded-lg transition"
                   >
+                    <XCircle size={12} className="mr-1 text-rose-500" />
                     {lang === "bn" ? "বাতিল" : "Reject"}
                   </CustomButton>
                 )}

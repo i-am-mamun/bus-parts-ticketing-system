@@ -35,6 +35,14 @@ SYSTEM_PERMISSIONS = [
     {"code": "branches.view", "module": "branches", "action": "view", "description": "View depots and branches"},
     {"code": "branches.manage", "module": "branches", "action": "manage", "description": "Create and edit depots and branches"},
 
+    # 4.1 Warehouses & Bins
+    {"code": "warehouses.view", "module": "warehouses", "action": "view", "description": "View spare parts stores, warehouses and location bins"},
+    {"code": "warehouses.manage", "module": "warehouses", "action": "manage", "description": "Create and manage warehouses and storage bins"},
+
+    # 4.2 Suppliers
+    {"code": "suppliers.view", "module": "suppliers", "action": "view", "description": "View parts vendors and suppliers directory"},
+    {"code": "suppliers.manage", "module": "suppliers", "action": "manage", "description": "Create and edit parts vendors and suppliers"},
+
     # 5. Reports
     {"code": "reports.view", "module": "reports", "action": "view", "description": "View ticket, cost and premature-replacement reports"},
     {"code": "reports.export", "module": "reports", "action": "export", "description": "Export / print reports"},
@@ -68,6 +76,8 @@ DEFAULT_ROLES = [
             "tickets.view", "tickets.create", "tickets.approve", "tickets.work", "tickets.release", "tickets.cost",
             "fleet.view", "fleet.create", "fleet.edit",
             "branches.view",
+            "warehouses.view", "warehouses.manage",
+            "suppliers.view", "suppliers.manage",
             "reports.view", "reports.export",
             "settings.view",
         ],
@@ -82,6 +92,8 @@ DEFAULT_ROLES = [
             "tickets.view", "tickets.create", "tickets.verify", "tickets.work", "tickets.release",
             "fleet.view",
             "branches.view",
+            "warehouses.view", "warehouses.manage",
+            "suppliers.view",
         ],
     },
     {

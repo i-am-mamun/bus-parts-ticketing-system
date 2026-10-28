@@ -18,6 +18,8 @@ import {
   Users,
   AlertTriangle,
   ClipboardCheck,
+  Warehouse as WhIcon,
+  Truck,
   type LucideIcon,
 } from "lucide-react";
 import { useAuth } from "./auth";
@@ -144,16 +146,28 @@ export function useDynamicNav() {
                 icon: CarFront,
               },
               {
-                label: "Parts History & Log Book",
-                labelBn: "পার্টস ব্যবহারের ইতিহাস",
-                href: "/fleet/history",
-                icon: History,
-              },
-              {
                 label: "Depots & Hubs",
                 labelBn: "ডিপো ও টার্মিনাল",
                 href: "/branches",
                 icon: Building2,
+              },
+              {
+                label: "Warehouses & Storage Bins",
+                labelBn: "ওয়্যারহাউজ ও স্টোরেজ বিন",
+                href: "/warehouses",
+                icon: WhIcon,
+              },
+              {
+                label: "Parts Suppliers & Vendors",
+                labelBn: "পার্টস সরবরাহকারী ও ভেন্ডর",
+                href: "/suppliers",
+                icon: Truck,
+              },
+              {
+                label: "Parts History & Log Book",
+                labelBn: "পার্টস ব্যবহারের ইতিহাস",
+                href: "/fleet/history",
+                icon: History,
               },
             ],
           },
@@ -180,8 +194,14 @@ export function useDynamicNav() {
               {
                 label: "Premature Wear Alerts",
                 labelBn: "অকাল নষ্ট পার্টস সতর্কতা",
-                href: "/reports?type=premature",
+                href: "/reports?tab=premature",
                 icon: AlertTriangle,
+              },
+              {
+                label: "Coach Spend Ranking",
+                labelBn: "কোচ অনুযায়ী খরচ র‍্যাঙ্কিং",
+                href: "/reports?tab=buses",
+                icon: CarFront,
               },
             ],
           },

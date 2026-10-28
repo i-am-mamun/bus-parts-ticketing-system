@@ -255,7 +255,7 @@ export function Sidebar() {
 
   return (
     <aside
-      className="relative hidden shrink-0 flex-col border-r border-brand-border bg-white text-slate-700 lg:flex shadow-xs select-none z-20"
+      className="relative hidden shrink-0 flex-col border-r border-brand-border bg-white text-slate-700 lg:flex shadow-xs select-none z-20 h-full print:hidden"
       style={{
         width: collapsed ? "72px" : "264px",
         minWidth: collapsed ? "72px" : "264px",

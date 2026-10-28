@@ -94,6 +94,59 @@ class Branch(Base, TimestampMixin):
     phone: Mapped[Optional[str]] = mapped_column(String(40), nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
 
+    warehouses: Mapped[List["Warehouse"]] = relationship(back_populates="branch", cascade="all, delete-orphan")
+
+
+# ── Warehouses & Storage Bins ───────────────────────────────────────────────
+class Warehouse(Base, TimestampMixin):
+    """Spare parts store / warehouse associated with an operational branch/depot."""
+    __tablename__ = "warehouses"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    branch_id: Mapped[int] = mapped_column(ForeignKey("branches.id", ondelete="CASCADE"), index=True)
+    name: Mapped[str] = mapped_column(String(120), index=True)
+    code: Mapped[str] = mapped_column(String(40), unique=True, index=True)
+    location: Mapped[Optional[str]] = mapped_column(String(100), nullable=True, default="Main Depot")
+    warehouse_type: Mapped[str] = mapped_column(String(40), default="Spares Store")
+    is_location_based: Mapped[bool] = mapped_column(Boolean, default=True)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+
+    branch: Mapped[Branch] = relationship(back_populates="warehouses")
+    bins: Mapped[List["WarehouseLocationBin"]] = relationship(back_populates="warehouse", cascade="all, delete-orphan")
+
+
+class WarehouseLocationBin(Base, TimestampMixin):
+    """Specific Bin/Rack/Shelf storage location inside a warehouse."""
+    __tablename__ = "warehouse_location_bins"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    warehouse_id: Mapped[int] = mapped_column(ForeignKey("warehouses.id", ondelete="CASCADE"), index=True)
+    row_code: Mapped[str] = mapped_column(String(20), default="R01", index=True)
+    col_code: Mapped[str] = mapped_column(String(20), default="C01", index=True)
+    rack_code: Mapped[str] = mapped_column(String(20), default="RK01", index=True)
+    bin_code: Mapped[str] = mapped_column(String(20), default="B01", index=True)
+    full_code: Mapped[str] = mapped_column(String(80), index=True)
+    name: Mapped[str] = mapped_column(String(100))
+    loc_type: Mapped[str] = mapped_column(String(40), default="STANDARD")
+    max_capacity: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    status: Mapped[str] = mapped_column(String(20), default="ACTIVE")
+
+    warehouse: Mapped[Warehouse] = relationship(back_populates="bins")
+
+
+# ── Suppliers Directory ─────────────────────────────────────────────────────
+class Supplier(Base, TimestampMixin):
+    """Parts vendors and suppliers directory for ticket sourcing and warranties."""
+    __tablename__ = "suppliers"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(160), index=True)
+    contact_person: Mapped[Optional[str]] = mapped_column(String(120), nullable=True)
+    phone: Mapped[Optional[str]] = mapped_column(String(40), nullable=True)
+    email: Mapped[Optional[str]] = mapped_column(String(160), nullable=True)
+    address: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    supplied_categories: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
+    rating: Mapped[float] = mapped_column(Float, default=5.0)
+    notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+
 
 class Bus(Base, TimestampMixin):
     __tablename__ = "buses"

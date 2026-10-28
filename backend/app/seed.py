@@ -21,12 +21,15 @@ from app.models import (
     PartHistory,
     ReleaseChecklistItem,
     Role,
+    Supplier,
     Ticket,
     TicketApproval,
     TicketAttachment,
     TicketEvent,
     TicketItem,
     User,
+    Warehouse,
+    WarehouseLocationBin,
 )
 from app.rbac_service import DEFAULT_ROLES, ensure_rbac_seeded
 
@@ -95,6 +98,129 @@ def seed_demo(db: Session) -> None:
     dhk_branch = db.scalar(select(Branch).where(Branch.code == "DHK-01"))
     ctg_branch = db.scalar(select(Branch).where(Branch.code == "CTG-01"))
     cxb_branch = db.scalar(select(Branch).where(Branch.code == "CXB-01"))
+    syl_branch = db.scalar(select(Branch).where(Branch.code == "SYL-01"))
+
+    # 2.1 Warehouses & Spares Stores (Associated with Branches)
+    warehouses_data = [
+        Warehouse(branch_id=dhk_branch.id, name="Sayedabad Central Spares Depot", code="WH-DHK-01", location="Central Depot Bay 1-4", warehouse_type="Central Spares Depot"),
+        Warehouse(branch_id=dhk_branch.id, name="Gabtoli Maintenance Workshop Store", code="WH-DHK-02", location="Terminal Workshop North", warehouse_type="Workshop Store"),
+        Warehouse(branch_id=ctg_branch.id, name="Dampara Regional Parts Warehouse", code="WH-CTG-01", location="Dampara Yard B", warehouse_type="Regional Store"),
+        Warehouse(branch_id=cxb_branch.id, name="Cox's Bazar Workshop Spares Store", code="WH-CXB-01", location="Workshop Zone A", warehouse_type="Terminal Store"),
+        Warehouse(branch_id=syl_branch.id, name="Sylhet Kadamtoli Maintenance Store", code="WH-SYL-01", location="Kadamtoli Bay 2", warehouse_type="Hub Store"),
+    ]
+    for w in warehouses_data:
+        if not db.scalar(select(Warehouse.id).where(Warehouse.code == w.code)):
+            db.add(w)
+    db.flush()
+
+    # 2.2 Seed structured Location Bins (Rows x Columns x Racks x Bins)
+    wh_dhk = db.scalar(select(Warehouse).where(Warehouse.code == "WH-DHK-01"))
+    if wh_dhk and not db.scalar(select(WarehouseLocationBin.id).where(WarehouseLocationBin.warehouse_id == wh_dhk.id)):
+        for r in range(1, 3):
+            for c in range(1, 3):
+                for rk in range(1, 4):
+                    for b in range(1, 3):
+                        fcode = f"R{r:02d}-C{c:02d}-RK{rk:02d}-B{b:02d}"
+                        db.add(WarehouseLocationBin(
+                            warehouse_id=wh_dhk.id,
+                            row_code=f"R{r:02d}", col_code=f"C{c:02d}", rack_code=f"RK{rk:02d}", bin_code=f"B{b:02d}",
+                            full_code=fcode, name=f"Bin {fcode}", loc_type="STANDARD", status="ACTIVE"
+                        ))
+
+    wh_ctg = db.scalar(select(Warehouse).where(Warehouse.code == "WH-CTG-01"))
+    if wh_ctg and not db.scalar(select(WarehouseLocationBin.id).where(WarehouseLocationBin.warehouse_id == wh_ctg.id)):
+        for r in range(1, 2):
+            for c in range(1, 3):
+                for rk in range(1, 3):
+                    for b in range(1, 3):
+                        fcode = f"R{r:02d}-C{c:02d}-RK{rk:02d}-B{b:02d}"
+                        db.add(WarehouseLocationBin(
+                            warehouse_id=wh_ctg.id,
+                            row_code=f"R{r:02d}", col_code=f"C{c:02d}", rack_code=f"RK{rk:02d}", bin_code=f"B{b:02d}",
+                            full_code=fcode, name=f"Bin {fcode}", loc_type="STANDARD", status="ACTIVE"
+                        ))
+
+    wh_cxb = db.scalar(select(Warehouse).where(Warehouse.code == "WH-CXB-01"))
+    if wh_cxb and not db.scalar(select(WarehouseLocationBin.id).where(WarehouseLocationBin.warehouse_id == wh_cxb.id)):
+        for r in range(1, 2):
+            for c in range(1, 2):
+                for rk in range(1, 3):
+                    for b in range(1, 3):
+                        fcode = f"R{r:02d}-C{c:02d}-RK{rk:02d}-B{b:02d}"
+                        db.add(WarehouseLocationBin(
+                            warehouse_id=wh_cxb.id,
+                            row_code=f"R{r:02d}", col_code=f"C{c:02d}", rack_code=f"RK{rk:02d}", bin_code=f"B{b:02d}",
+                            full_code=fcode, name=f"Bin {fcode}", loc_type="STANDARD", status="ACTIVE"
+                        ))
+    db.flush()
+
+    # 2.3 Seed Suppliers / Parts Vendors
+    suppliers_data = [
+        Supplier(
+            name="Hino Motors Bangladesh (Navana Spares)",
+            contact_person="Md. Kamrul Islam (Senior Spares Manager)",
+            phone="01713001122",
+            email="hino.spares@navana.com",
+            address="214/D Tejgaon Industrial Area, Dhaka-1208",
+            supplied_categories="Engine, Braking, Suspension, Transmission",
+            rating=4.9,
+            notes="Official authorized Hino genuine parts distributor for Soudia fleet.",
+        ),
+        Supplier(
+            name="Scania Parts & Service BD (Aftab Motors)",
+            contact_person="Engr. M. Rahman",
+            phone="01819223344",
+            email="scania.parts@aftab.com",
+            address="Kachpur Industrial Zone, Narayanganj",
+            supplied_categories="Multi-Axle Suspension, Air Brake, Retarder, Diagnostics",
+            rating=4.8,
+            notes="Direct OEM Scania multi-axle coach importer.",
+        ),
+        Supplier(
+            name="Hyundai Commercial Auto Spares BD",
+            contact_person="S. K. Roy",
+            phone="01912445566",
+            email="hyundai.spares@bdauto.com",
+            address="Agrabad Commercial Area, Chittagong",
+            supplied_categories="Engine, Electrical, Cooling System, Transmission",
+            rating=4.7,
+            notes="Supplies Hyundai Universe parts for Chittagong & Cox's Bazar routes.",
+        ),
+        Supplier(
+            name="Bosch Diesel Systems & Auto Electrical",
+            contact_person="Zahirul Huq",
+            phone="01711889900",
+            email="service@boschdieselbd.com",
+            address="Bangabandhu Stadium Market, Dhaka-1000",
+            supplied_categories="Fuel Injector, Common Rail Pump, Alternator, Starter Motor",
+            rating=4.9,
+            notes="High precision diesel injector calibration & replacement.",
+        ),
+        Supplier(
+            name="MRF & Goodyear Heavy Coach Tyres BD",
+            contact_person="Al-Amin Hossain",
+            phone="01611778899",
+            email="fleet.tyres@mrfbd.com",
+            address="Moghbazar, Dhaka",
+            supplied_categories="Tyres, Tubes, Alloy Rims, Wheel Balancing Weights",
+            rating=4.6,
+            notes="Radial tubeless 295/80R22.5 tyres contracted supplier.",
+        ),
+        Supplier(
+            name="Castrol & Mobil Fleet Lubricants Distribution",
+            contact_person="Tariq Hasan",
+            phone="01712556677",
+            email="lubricants@soudiasupply.com",
+            address="Sholoshohor Heavy Industrial Area, Chittagong",
+            supplied_categories="Engine Oil 15W40, Gear Oil 85W140, Coolant, High Temp Grease",
+            rating=5.0,
+            notes="Exclusive bulk barrel lubricant delivery to Sayedabad & Dampara depots.",
+        ),
+    ]
+    for s in suppliers_data:
+        if not db.scalar(select(Supplier.id).where(Supplier.name == s.name)):
+            db.add(s)
+    db.flush()
 
     # 3. Bus Fleet Registry
     buses_data = [

@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 from app.deps import ADMIN, get_current_user, require_roles, user_permissions
-from app.models import Branch, Bus, PartCatalog, PartHistory, Ticket, User
+from app.models import Branch, Bus, PartCatalog, PartHistory, Ticket, User, Warehouse
 from app.schemas import BranchIn, BusIn, Page
 from app.services import audit
 
@@ -35,6 +35,7 @@ def list_branches(
     out = []
     for b in rows:
         bus_count = db.scalar(select(func.count(Bus.id)).where(Bus.branch_id == b.id)) or 0
+        warehouse_count = db.scalar(select(func.count(Warehouse.id)).where(Warehouse.branch_id == b.id)) or 0
         out.append({
             "id": b.id,
             "name": b.name,
@@ -44,6 +45,7 @@ def list_branches(
             "phone": b.phone,
             "is_active": b.is_active,
             "bus_count": bus_count,
+            "warehouse_count": warehouse_count,
         })
     return out
 

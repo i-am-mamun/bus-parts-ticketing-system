@@ -606,6 +606,13 @@ input[type="button"]:not(:disabled),
 /* GLOBAL PRINT ENGINE: Supports A4 Vouchers, Slips & 80mm POS Thermal Receipts */
 /* ========================================================================= */
 @media print {
+  html, body {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+  }
+
   /* Default: hide all background app chrome and navigation */
   body * {
     visibility: hidden;
@@ -641,19 +648,25 @@ input[type="button"]:not(:disabled),
     print-color-adjust: exact !important;
   }
 
-  /* 2. Enterprise Documents, A4 Invoices & Purchasing Voucher Slips */
+  /* 2. Enterprise Documents, A4 Invoices, Reports & Slips */
   #printable-slip,
   #printable-slip *,
   #printable-invoice,
   #printable-invoice *,
   .printable-document,
-  .printable-document * {
-    visibility: visible;
+  .printable-document *,
+  #printable-report,
+  #printable-report *,
+  .printable-report,
+  .printable-report * {
+    visibility: visible !important;
   }
 
   #printable-slip,
   #printable-invoice,
-  .printable-document {
+  .printable-document,
+  #printable-report,
+  .printable-report {
     position: absolute !important;
     left: 0 !important;
     top: 0 !important;
@@ -661,24 +674,30 @@ input[type="button"]:not(:disabled),
     max-width: 100% !important;
     box-sizing: border-box !important;
     margin: 0 !important;
-    padding: 10mm 12mm !important;
+    padding: 8mm 10mm !important;
     box-shadow: none !important;
     border: none !important;
     background: #ffffff !important;
-    color: #1e293b !important;
+    color: #0f172a !important;
     overflow: visible !important;
     max-height: none !important;
     height: auto !important;
     display: block !important;
-    z-index: 99999 !important;
+    z-index: 999999 !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
   /* Hide print buttons, close buttons, modal backdrops in print */
-  .no-print {
+  .no-print,
+  .print\:hidden {
     display: none !important;
     visibility: hidden !important;
+  }
+
+  .print\:block {
+    display: block !important;
+    visibility: visible !important;
   }
 
   /* 3. Restaurant Bill Print Receipt */

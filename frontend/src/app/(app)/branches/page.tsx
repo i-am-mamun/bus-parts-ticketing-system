@@ -14,6 +14,7 @@ import {
   XCircle,
   RefreshCw,
   Ticket,
+  Warehouse as WhIcon,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
@@ -47,8 +48,8 @@ export default function BranchesPage() {
   const loadBranches = async () => {
     try {
       setLoading(true);
-      const res = await api.get<{ items: Branch[]; total: number }>("/api/v1/branches?page_size=100");
-      setBranches(res.items || []);
+      const res = await api.get<any>("/api/v1/branches?page_size=100");
+      setBranches(Array.isArray(res) ? res : (res?.items || []));
     } catch (err) {
       console.error("Failed to load branches:", err);
     } finally {
@@ -280,16 +281,30 @@ export default function BranchesPage() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between pt-3 border-t border-slate-100 mt-2">
-                <Link
-                  href={`/fleet?branch_id=${b.id}`}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-brand-primary transition"
-                >
-                  <CarFront size={13} className="text-brand-primary" />
-                  <span>
-                    {lang === "bn" ? `${b.bus_count || 0} টি বাস নির্ধারিত` : `${b.bus_count || 0} Assigned Coaches`}
-                  </span>
-                </Link>
+              <div className="flex items-center justify-between pt-3 border-t border-slate-100 mt-2 gap-2 flex-wrap">
+                <div className="flex items-center gap-3 text-xs">
+                  <Link
+                    href={`/fleet?branch_id=${b.id}`}
+                    className="inline-flex items-center gap-1.5 font-bold text-slate-700 hover:text-brand-primary transition"
+                  >
+                    <CarFront size={13} className="text-brand-primary" />
+                    <span>
+                      {lang === "bn" ? `${b.bus_count || 0} টি বাস` : `${b.bus_count || 0} Coaches`}
+                    </span>
+                  </Link>
+
+                  <span className="text-slate-300">•</span>
+
+                  <Link
+                    href={`/warehouses?branch_id=${b.id}`}
+                    className="inline-flex items-center gap-1.5 font-bold text-slate-700 hover:text-brand-primary transition"
+                  >
+                    <WhIcon size={13} className="text-brand-primary" />
+                    <span>
+                      {lang === "bn" ? `${b.warehouse_count || 0} টি স্টোর` : `${b.warehouse_count || 0} Stores`}
+                    </span>
+                  </Link>
+                </div>
 
                 <CustomButton
                   variant="outline"
