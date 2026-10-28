@@ -190,6 +190,7 @@ class Ticket(Base, TimestampMixin):
     bus_id: Mapped[Optional[int]] = mapped_column(ForeignKey("buses.id", ondelete="SET NULL"), nullable=True, index=True)
     to_bus_id: Mapped[Optional[int]] = mapped_column(ForeignKey("buses.id", ondelete="SET NULL"), nullable=True)
     branch_id: Mapped[Optional[int]] = mapped_column(ForeignKey("branches.id", ondelete="SET NULL"), nullable=True)
+    warehouse_id: Mapped[Optional[int]] = mapped_column(ForeignKey("warehouses.id", ondelete="SET NULL"), nullable=True)
 
     route: Mapped[Optional[str]] = mapped_column(String(160), nullable=True)
     driver_name: Mapped[Optional[str]] = mapped_column(String(120), nullable=True)
@@ -221,6 +222,7 @@ class Ticket(Base, TimestampMixin):
     bus: Mapped[Optional[Bus]] = relationship(foreign_keys=[bus_id], lazy="joined")
     to_bus: Mapped[Optional[Bus]] = relationship(foreign_keys=[to_bus_id], lazy="joined")
     branch: Mapped[Optional[Branch]] = relationship(foreign_keys=[branch_id], lazy="joined")
+    warehouse: Mapped[Optional[Warehouse]] = relationship(foreign_keys=[warehouse_id], lazy="joined")
     items: Mapped[List["TicketItem"]] = relationship(
         back_populates="ticket", cascade="all, delete-orphan", order_by="TicketItem.id"
     )
@@ -242,6 +244,8 @@ class TicketItem(Base):
     __tablename__ = "ticket_items"
     id: Mapped[int] = mapped_column(primary_key=True)
     ticket_id: Mapped[int] = mapped_column(ForeignKey("tickets.id", ondelete="CASCADE"), index=True)
+    warehouse_id: Mapped[Optional[int]] = mapped_column(ForeignKey("warehouses.id", ondelete="SET NULL"), nullable=True)
+    bin_code: Mapped[Optional[str]] = mapped_column(String(60), nullable=True)
     part_name: Mapped[str] = mapped_column(String(160))
     part_no: Mapped[Optional[str]] = mapped_column(String(80), nullable=True)
     qty: Mapped[float] = mapped_column(Float, default=1)
@@ -256,6 +260,7 @@ class TicketItem(Base):
     is_premature: Mapped[bool] = mapped_column(Boolean, default=False)
 
     ticket: Mapped[Ticket] = relationship(back_populates="items")
+    warehouse: Mapped[Optional[Warehouse]] = relationship(foreign_keys=[warehouse_id], lazy="joined")
 
 
 class TicketApproval(Base):

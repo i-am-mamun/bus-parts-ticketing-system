@@ -619,9 +619,15 @@ function TicketsContent() {
                                 ➔ {lang === "bn" ? "প্রাপক বাস" : "To"}: {t.to_bus.bus_no}
                               </span>
                             )}
-                            <span className="block text-[10px] text-slate-400 truncate max-w-[130px]">
-                              {t.bus.route || (lang === "bn" ? "রুট নির্ধারিত নেই" : "No route assigned")}
-                            </span>
+                            {t.warehouse ? (
+                              <span className="block text-[10px] font-medium text-amber-800 truncate max-w-[140px]" title={t.warehouse.name}>
+                                🏬 {t.warehouse.name}
+                              </span>
+                            ) : (
+                              <span className="block text-[10px] text-slate-400 truncate max-w-[130px]">
+                                {t.bus.route || (lang === "bn" ? "রুট নির্ধারিত নেই" : "No route assigned")}
+                              </span>
+                            )}
                           </div>
                         ) : (
                           "—"

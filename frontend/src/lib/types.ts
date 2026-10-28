@@ -98,6 +98,8 @@ export interface TicketItem {
   unit_price?: number | null;
   line_total?: number | null;
   remarks?: string | null;
+  bin_code?: string | null;
+  warehouse_id?: number | null;
   last_replaced_on?: string | null;
   last_replaced_km?: number | null;
   used_km?: number | null;
@@ -182,6 +184,8 @@ export interface Ticket {
   bus?: { id: number; bus_no: string; name?: string; route?: string; odometer_km?: number; status?: string } | null;
   to_bus?: { id: number; bus_no: string; name?: string; route?: string; odometer_km?: number; status?: string } | null;
   branch?: { id: number; name: string; code: string } | null;
+  warehouse_id?: number | null;
+  warehouse?: { id: number; name: string; code: string; location?: string | null } | null;
   route?: string | null;
   driver_name?: string | null;
   odometer_km?: number | null;

@@ -717,6 +717,16 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
               <span className="text-slate-500">{lang === "bn" ? "অপারেটিং ডিপো:" : "Operating Depot:"}</span>
               <span className="font-semibold text-slate-700">{ticket.branch?.name || "Central Depot"}</span>
             </div>
+            {ticket.warehouse && (
+              <div className="flex justify-between py-1.5 px-2 border-b border-slate-100 bg-amber-50/70 rounded-lg border border-amber-200">
+                <span className="font-bold text-amber-900">
+                  {lang === "bn" ? "ইস্যুকারী স্টোর / ওয়্যারহাউজ:" : "Issuing Store / Warehouse:"}
+                </span>
+                <span className="font-bold text-brand-primary">
+                  {ticket.warehouse.name} ({ticket.warehouse.code})
+                </span>
+              </div>
+            )}
             <div className="flex justify-between py-1">
               <span className="text-slate-500">{lang === "bn" ? "চালকের নাম:" : "Driver Name:"}</span>
               <span className="font-semibold text-slate-700">{ticket.driver_name || "—"}</span>
@@ -823,6 +833,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
                 <th className="py-2.5 px-3">{lang === "bn" ? "পার্টসের নাম" : "Part Name"}</th>
                 <th className="py-2.5 px-3">{lang === "bn" ? "পার্ট নং" : "Part No"}</th>
                 <th className="py-2.5 px-3">{lang === "bn" ? "পরিমাণ" : "Qty"}</th>
+                <th className="py-2.5 px-3">{lang === "bn" ? "স্টোর র্যাক / বিন" : "Storage Bin / Rack"}</th>
                 <th className="py-2.5 px-3">{lang === "bn" ? "পূর্ববর্তী পরিবর্তন" : "Last Replaced (KM)"}</th>
                 <th className="py-2.5 px-3">{lang === "bn" ? "ব্যবহৃত কিমি" : "Used KM"}</th>
                 {canSeeCost && (
@@ -848,6 +859,15 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
                   <td className="py-2.5 px-3 font-mono text-slate-500">{item.part_no || "—"}</td>
                   <td className="py-2.5 px-3 font-bold text-slate-700">
                     {item.qty} {item.unit}
+                  </td>
+                  <td className="py-2.5 px-3">
+                    {item.bin_code ? (
+                      <span className="font-mono font-bold text-[11px] px-2 py-0.5 rounded bg-amber-50 border border-amber-200 text-amber-900">
+                        {item.bin_code}
+                      </span>
+                    ) : (
+                      <span className="text-slate-400">—</span>
+                    )}
                   </td>
                   <td className="py-2.5 px-3 text-slate-600">
                     {item.last_replaced_on ? (
@@ -883,7 +903,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
             {canSeeCost && (
               <tfoot className="bg-slate-50/70 border-t border-slate-200 font-bold text-xs">
                 <tr>
-                  <td colSpan={6} className="py-2 px-3 text-right text-slate-600">
+                  <td colSpan={7} className="py-2 px-3 text-right text-slate-600">
                     {lang === "bn" ? "পার্টসের উপমোট:" : "Parts Subtotal:"}
                   </td>
                   <td colSpan={2} className="py-2 px-3 text-right font-mono text-slate-800">
@@ -891,7 +911,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
                   </td>
                 </tr>
                 <tr>
-                  <td colSpan={6} className="py-1 px-3 text-right text-slate-600 font-normal">
+                  <td colSpan={7} className="py-1 px-3 text-right text-slate-600 font-normal">
                     {lang === "bn" ? "ওয়ার্কশপ মজুরি:" : "Labor & Workshop Cost:"}
                   </td>
                   <td colSpan={2} className="py-1 px-3 text-right font-mono text-slate-700 font-normal">
@@ -900,7 +920,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
                 </tr>
                 {ticket.other_cost ? (
                   <tr>
-                    <td colSpan={6} className="py-1 px-3 text-right text-slate-600 font-normal">
+                    <td colSpan={7} className="py-1 px-3 text-right text-slate-600 font-normal">
                       {lang === "bn" ? "অন্যান্য খরচ:" : "Other Charges:"}
                     </td>
                     <td colSpan={2} className="py-1 px-3 text-right font-mono text-slate-700 font-normal">
@@ -909,7 +929,7 @@ export default function TicketDetailPage({ params }: { params: Promise<{ id: str
                   </tr>
                 ) : null}
                 <tr className="border-t border-slate-300 text-sm text-brand-primary">
-                  <td colSpan={6} className="py-2.5 px-3 text-right font-bold">
+                  <td colSpan={7} className="py-2.5 px-3 text-right font-bold">
                     {lang === "bn" ? "সর্বমোট খরচ:" : "Grand Total Cost:"}
                   </td>
                   <td colSpan={2} className="py-2.5 px-3 text-right font-mono font-bold">

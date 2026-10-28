@@ -136,6 +136,8 @@ def _list_row(t: Ticket, show_cost: bool) -> dict:
         "status": t.status,
         "bus": _bus_brief(t.bus),
         "to_bus": _bus_brief(t.to_bus),
+        "warehouse": {"id": t.warehouse.id, "name": t.warehouse.name, "code": t.warehouse.code} if t.warehouse else None,
+        "branch": {"id": t.branch.id, "name": t.branch.name, "code": t.branch.code} if t.branch else None,
         "created_by_name": t.created_by_name,
         "created_at": t.created_at,
         "needed_by": t.needed_by,
@@ -158,10 +160,12 @@ def _detail(t: Ticket, user: User, perms: set[str]) -> dict:
             "line_total": round((i.qty or 0) * (i.unit_price or 0), 2) if show_cost else None,
             "remarks": i.remarks, "last_replaced_on": i.last_replaced_on, "last_replaced_km": i.last_replaced_km,
             "used_km": i.used_km, "expected_life_km": i.expected_life_km, "is_premature": i.is_premature,
+            "bin_code": i.bin_code, "warehouse_id": i.warehouse_id,
         })
     row.update({
         "description": t.description,
         "branch": {"id": t.branch.id, "name": t.branch.name, "code": t.branch.code} if t.branch else None,
+        "warehouse": {"id": t.warehouse.id, "name": t.warehouse.name, "code": t.warehouse.code, "location": t.warehouse.location} if t.warehouse else None,
         "route": t.route, "driver_name": t.driver_name, "odometer_km": t.odometer_km,
         "reason_category": t.reason_category, "reason_text": t.reason_text,
         "labor_cost": t.labor_cost if show_cost else None,
@@ -294,6 +298,8 @@ def _sync_items(t: Ticket, items) -> None:
         t.items.append(TicketItem(
             part_name=it.part_name.strip(), part_no=it.part_no, qty=it.qty, unit=it.unit or "pcs",
             unit_price=it.unit_price, remarks=it.remarks,
+            bin_code=getattr(it, "bin_code", None),
+            warehouse_id=getattr(it, "warehouse_id", None) or t.warehouse_id,
         ))
 
 
@@ -481,6 +487,7 @@ def create_ticket(body: TicketIn, user: User = Depends(get_current_user), db: Se
         ticket_no=next_ticket_no(db, body.type), type=body.type, title=body.title.strip(), description=body.description,
         priority=body.priority, status="DRAFT", bus_id=body.bus_id, to_bus_id=body.to_bus_id,
         branch_id=body.branch_id or (bus.branch_id if bus else None),
+        warehouse_id=body.warehouse_id,
         route=body.route or (bus.route if bus else None), driver_name=body.driver_name,
         odometer_km=body.odometer_km, needed_by=body.needed_by, reason_category=body.reason_category,
         reason_text=body.reason_text, created_by_id=user.id, created_by_name=user.name,

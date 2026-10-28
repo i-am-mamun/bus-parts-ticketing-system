@@ -22,6 +22,7 @@ import {
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
+import { Warehouse } from "@/lib/types";
 import {
   CustomButton,
   CustomInput,
@@ -46,12 +47,14 @@ interface BusOption {
   route?: string;
   odometer_km: number;
   status: string;
+  branch_id?: number;
 }
 
 interface PartLine {
   id: string;
   part_name: string;
   part_no: string;
+  bin_code?: string;
   qty: number;
   unit: string;
   unit_price: number;
@@ -76,6 +79,8 @@ function NewTicketContent() {
 
   const [buses, setBuses] = useState<BusOption[]>([]);
   const [catalog, setCatalog] = useState<PartCatalogOption[]>([]);
+  const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
+  const [selectedWarehouseId, setSelectedWarehouseId] = useState<string>("");
   const [selectedBusId, setSelectedBusId] = useState<string>("");
   const [selectedToBusId, setSelectedToBusId] = useState<string>("");
   const [route, setRoute] = useState<string>("");
@@ -94,6 +99,7 @@ function NewTicketContent() {
       id: "line-1",
       part_name: "",
       part_no: "",
+      bin_code: "",
       qty: 1,
       unit: "pcs",
       unit_price: 0,
@@ -108,7 +114,7 @@ function NewTicketContent() {
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  // Load Buses & Part Catalog
+  // Load Buses, Part Catalog & Warehouses
   useEffect(() => {
     api
       .get<{ items: BusOption[] }>("/api/v1/fleet/buses?page_size=100")
@@ -119,15 +125,26 @@ function NewTicketContent() {
       .get<PartCatalogOption[]>("/api/v1/fleet/parts-catalog")
       .then((res) => setCatalog(res || []))
       .catch(() => {});
+
+    api
+      .get<Warehouse[]>("/api/v1/warehouses")
+      .then((res) => setWarehouses(res || []))
+      .catch(() => {});
   }, []);
 
-  // When bus is selected, auto-fill route and odometer
+  // When bus is selected, auto-fill route, odometer, and relevant warehouse
   const handleBusSelect = (busIdStr: string) => {
     setSelectedBusId(busIdStr);
     const matched = buses.find((b) => String(b.id) === busIdStr);
     if (matched) {
       if (matched.route) setRoute(matched.route);
       if (matched.odometer_km) setOdometerKm(String(matched.odometer_km));
+      if (matched.branch_id && warehouses.length > 0) {
+        const whInBranch = warehouses.find((w) => w.branch_id === matched.branch_id);
+        if (whInBranch) {
+          setSelectedWarehouseId(String(whInBranch.id));
+        }
+      }
     }
   };
 
@@ -247,6 +264,8 @@ function NewTicketContent() {
       .map((i) => ({
         part_name: i.part_name.trim(),
         part_no: i.part_no.trim() || undefined,
+        bin_code: i.bin_code?.trim() || undefined,
+        warehouse_id: selectedWarehouseId ? Number(selectedWarehouseId) : undefined,
         qty: Number(i.qty) || 1,
         unit: i.unit.trim() || "pcs",
         unit_price: Number(i.unit_price) || 0,
@@ -269,6 +288,7 @@ function NewTicketContent() {
         priority,
         bus_id: Number(selectedBusId),
         to_bus_id: selectedToBusId ? Number(selectedToBusId) : undefined,
+        warehouse_id: selectedWarehouseId ? Number(selectedWarehouseId) : undefined,
         route: route.trim() || undefined,
         driver_name: driverName.trim() || undefined,
         odometer_km: odometerKm ? Number(odometerKm) : undefined,
@@ -506,6 +526,21 @@ function NewTicketContent() {
           </div>
 
           <div className="sm:col-span-2">
+            <CustomSelect
+              label={lang === "bn" ? "ইস্যুকারী ওয়্যারহাউজ / স্পেয়ার্স স্টোর" : "Issuing Warehouse / Store"}
+              value={selectedWarehouseId}
+              onChange={(e) => setSelectedWarehouseId(e.target.value)}
+              options={[
+                { value: "", label: lang === "bn" ? "ওয়্যারহাউজ বা স্টোর নির্বাচন করুন (ঐচ্ছিক)" : "Select Warehouse or Store (Optional)" },
+                ...warehouses.map((w) => ({
+                  value: String(w.id),
+                  label: `${w.name} (${w.code}) ${w.branch_name ? `— ${w.branch_name}` : ""}`,
+                })),
+              ]}
+            />
+          </div>
+
+          <div className="sm:col-span-2">
             <CustomTextarea
               label={lang === "bn" ? "সমস্যার বিস্তারিত বিবরণ" : "Detailed Problem Description"}
               placeholder={
@@ -717,7 +752,7 @@ function NewTicketContent() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
-                  <div className="sm:col-span-5">
+                  <div className="sm:col-span-4">
                     <label className="block text-[11px] font-bold text-slate-700 mb-1">
                       {lang === "bn" ? "পার্টসের নাম *" : "Part Name *"}
                     </label>
@@ -746,9 +781,9 @@ function NewTicketContent() {
                     </datalist>
                   </div>
 
-                  <div className="sm:col-span-3">
+                  <div className="sm:col-span-2">
                     <label className="block text-[11px] font-bold text-slate-700 mb-1">
-                      {lang === "bn" ? "পার্ট নং বা এসকেইউ (ঐচ্ছিক)" : "Part No or SKU (Optional)"}
+                      {lang === "bn" ? "পার্ট নং (ঐচ্ছিক)" : "Part No"}
                     </label>
                     <input
                       type="text"
@@ -759,6 +794,26 @@ function NewTicketContent() {
                         setItems((prev) => {
                           const next = [...prev];
                           next[index].part_no = val;
+                          return next;
+                        });
+                      }}
+                      className="w-full text-xs text-slate-800 bg-white border border-slate-200 rounded-md p-2 outline-none focus:border-brand-primary"
+                    />
+                  </div>
+
+                  <div className="sm:col-span-2">
+                    <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                      {lang === "bn" ? "স্টোরেজ বিন / র্যাক" : "Bin / Rack"}
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. R01-C01-RK01"
+                      value={line.bin_code || ""}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setItems((prev) => {
+                          const next = [...prev];
+                          next[index].bin_code = val;
                           return next;
                         });
                       }}

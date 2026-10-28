@@ -237,6 +237,8 @@ class TicketItemIn(BaseModel):
     unit: str = "pcs"
     unit_price: float = Field(default=0, ge=0)
     remarks: Optional[str] = None
+    bin_code: Optional[str] = None
+    warehouse_id: Optional[int] = None
 
 
 class TicketIn(BaseModel):
@@ -247,6 +249,7 @@ class TicketIn(BaseModel):
     bus_id: Optional[int] = None
     to_bus_id: Optional[int] = None
     branch_id: Optional[int] = None
+    warehouse_id: Optional[int] = None
     route: Optional[str] = None
     driver_name: Optional[str] = None
     odometer_km: Optional[float] = None
@@ -263,6 +266,7 @@ class TicketUpdate(BaseModel):
     bus_id: Optional[int] = None
     to_bus_id: Optional[int] = None
     branch_id: Optional[int] = None
+    warehouse_id: Optional[int] = None
     route: Optional[str] = None
     driver_name: Optional[str] = None
     odometer_km: Optional[float] = None
